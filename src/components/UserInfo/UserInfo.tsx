@@ -1,5 +1,6 @@
-import { useStore } from '../../state/storeHooks';
-import { Profile } from '../../types/profile';
+import { useAtom } from 'jotai';
+import { userAtom } from 'components/App/App.atoms';
+import { Profile } from 'types/profile';
 
 export function UserInfo({
   user: { image, username, bio, following },
@@ -12,7 +13,7 @@ export function UserInfo({
   onFollowToggle?: () => void;
   onEditSettings?: () => void;
 }) {
-  const { user } = useStore(({ app }) => app);
+  const [user] = useAtom(userAtom);
   const sessionUsername = user.map((x) => x.username).unwrapOr('');
 
   return (

@@ -1,5 +1,7 @@
 import { Option } from '@hqoss/monads';
+import { userAtom } from 'components/App/App.atoms';
 import { format } from 'date-fns';
+import { useAtom } from 'jotai';
 import React, { Fragment, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
@@ -37,14 +39,11 @@ import {
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
+  const [user] = useAtom(userAtom);
 
   const {
     articlePage: { article, commentSection, metaSection },
-    app: { user },
-  } = useStore(({ articlePage, app }) => ({
-    articlePage,
-    app,
-  }));
+  } = useStore(({ articlePage }) => ({ articlePage }));
 
   useEffect(() => {
     onLoad(slug);
@@ -199,10 +198,10 @@ function NonOwnerArticleMetaActions({
 }
 
 async function onFollow(username: string, following: boolean) {
-  if (store.getState().app.user.isNone()) {
-    redirect('register');
-    return;
-  }
+  // if (store.getState().app.user.isNone()) {
+  //   redirect('register');
+  //   return;
+  // }
 
   store.dispatch(startSubmittingFollow());
 
@@ -211,10 +210,10 @@ async function onFollow(username: string, following: boolean) {
 }
 
 async function onFavorite(slug: string, favorited: boolean) {
-  if (store.getState().app.user.isNone()) {
-    redirect('register');
-    return;
-  }
+  // if (store.getState().app.user.isNone()) {
+  //   redirect('register');
+  //   return;
+  // }
 
   store.dispatch(startSubmittingFavorite());
 

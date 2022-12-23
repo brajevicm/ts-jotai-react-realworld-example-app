@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getArticles, getFeed, getTags, getUser } from '../../services/conduit';
 import { store } from '../../state/store';
 import { App } from './App';
-import { initializeApp } from './App.slice';
+// import { initializeApp } from './App.slice';
 
 jest.mock('../../services/conduit');
 jest.mock('axios');
@@ -36,7 +36,7 @@ it('Should render home', async () => {
 
 it('Should get user if token is on storage', async () => {
   act(() => {
-    store.dispatch(initializeApp());
+    // store.dispatch(initializeApp());
   });
   mockedGetUser.mockResolvedValueOnce({
     email: 'jake@jake.jake',
@@ -68,7 +68,7 @@ it('Should get user if token is on storage', async () => {
 
 it('Should end load if get user fails', async () => {
   await act(async () => {
-    store.dispatch(initializeApp());
+    // store.dispatch(initializeApp());
   });
   mockedGetUser.mockRejectedValueOnce({});
   mockedGetArticles.mockResolvedValueOnce({

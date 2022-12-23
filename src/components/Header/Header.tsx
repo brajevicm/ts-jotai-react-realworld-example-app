@@ -1,10 +1,11 @@
+import { useAtom } from 'jotai';
 import { Fragment } from 'react';
 import { HashRouter, NavLink } from 'react-router-dom';
-import { useStore } from '../../state/storeHooks';
-import { User } from '../../types/user';
+import { userAtom } from 'components/App/App.atoms';
+import { User } from 'types/user';
 
 export function Header() {
-  const { user } = useStore(({ app }) => app);
+  const [user] = useAtom(userAtom);
 
   return (
     <nav className='navbar navbar-light'>

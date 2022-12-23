@@ -37,9 +37,9 @@ async function load() {
   store.dispatch(startLoadingArticles());
   store.dispatch(startLoadingTags());
 
-  if (store.getState().app.user.isSome()) {
-    store.dispatch(changeTab('Your Feed'));
-  }
+  // if (store.getState().app.user.isSome()) {
+  //   store.dispatch(changeTab('Your Feed'));
+  // }
 
   const multipleArticles = await getFeedOrGlobalArticles();
   store.dispatch(loadArticles(multipleArticles));
@@ -60,9 +60,10 @@ function renderBanner() {
 }
 
 function buildTabsNames(selectedTab: string) {
-  const { user } = store.getState().app;
+  // const { user } = store.getState().app;
 
-  return Array.from(new Set([...(user.isSome() ? ['Your Feed'] : []), 'Global Feed', selectedTab]));
+  // return Array.from(new Set([...(user.isSome() ? ['Your Feed'] : []), 'Global Feed', selectedTab]));
+  return Array.from(new Set([...[], 'Global Feed', selectedTab]));
 }
 
 async function onPageChange(index: number) {

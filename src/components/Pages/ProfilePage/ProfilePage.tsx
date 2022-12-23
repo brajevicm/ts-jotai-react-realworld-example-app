@@ -77,11 +77,11 @@ async function getArticlesByType(username: string, favorites: boolean) {
 
 function onFollowToggle(profile: Profile): () => void {
   return async () => {
-    const { user } = store.getState().app;
-    if (user.isNone()) {
-      redirect('register');
-      return;
-    }
+    // const { user } = store.getState().app;
+    // if (user.isNone()) {
+    //   redirect('register');
+    //   return;
+    // }
 
     store.dispatch(startSubmitting());
 

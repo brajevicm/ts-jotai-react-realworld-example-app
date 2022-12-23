@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { Fragment } from 'react';
+import { useAtom } from 'jotai';
+import { Fragment, useEffect } from 'react';
 import { HashRouter, Redirect, Route, RouteProps, Switch } from 'react-router-dom';
-import { getUser } from '../../services/conduit';
-import { store } from '../../state/store';
-import { useStoreWithInitializer } from '../../state/storeHooks';
+import { loadUserAtom, userAsyncStatusAtom, userIsLoggedAtom } from 'components/App/App.atoms';
+import { getUser } from 'services/conduit';
 import { EditArticle } from '../Pages/EditArticle/EditArticle';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
@@ -12,14 +12,14 @@ import { Login } from '../Pages/Login/Login';
 import { NewArticle } from '../Pages/NewArticle/NewArticle';
 import { Register } from '../Pages/Register/Register';
 import { Settings } from '../Pages/Settings/Settings';
-import { endLoad, loadUser } from './App.slice';
 import { ProfilePage } from '../Pages/ProfilePage/ProfilePage';
 import { ArticlePage } from '../Pages/ArticlePage/ArticlePage';
 
 export function App() {
-  const { loading, user } = useStoreWithInitializer(({ app }) => app, load);
+  const [userIsLogged] = useAtom(userIsLoggedAtom);
+  const [loading] = useAtom(userAsyncStatusAtom);
 
-  const userIsLogged = user.isSome();
+  useLoadUser();
 
   return (
     <HashRouter>
@@ -62,20 +62,31 @@ export function App() {
   );
 }
 
-async function load() {
-  const token = localStorage.getItem('token');
-  if (!store.getState().app.loading || !token) {
-    store.dispatch(endLoad());
-    return;
-  }
-  axios.defaults.headers.Authorization = `Token ${token}`;
+const useLoadUser = () => {
+  const [userAsyncStatus, setUserAsyncStatus] = useAtom(userAsyncStatusAtom);
+  const [_, loadUser] = useAtom(loadUserAtom);
 
-  try {
-    store.dispatch(loadUser(await getUser()));
-  } catch {
-    store.dispatch(endLoad());
-  }
-}
+  useEffect(() => {
+    const asyncHandle = async () => {
+      const token = localStorage.getItem('token');
+      if (!userAsyncStatus || !token) {
+        setUserAsyncStatus(false);
+        return;
+      }
+
+      axios.defaults.headers.Authorization = `Token ${token}`;
+
+      try {
+        const user = await getUser();
+        loadUser(user);
+      } catch {
+        setUserAsyncStatus(false);
+      }
+    };
+
+    asyncHandle();
+  });
+};
 
 /* istanbul ignore next */
 function GuestOnlyRoute({

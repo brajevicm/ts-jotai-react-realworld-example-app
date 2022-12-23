@@ -5,7 +5,7 @@ import { store } from '../../../state/store';
 import { useStore } from '../../../state/storeHooks';
 import { UserSettings } from '../../../types/user';
 import { buildGenericFormField } from '../../../types/genericFormField';
-import { loadUser, logout } from '../../App/App.slice';
+// import { loadUser, logout } from '../../App/App.slice';
 import { GenericForm } from '../../GenericForm/GenericForm';
 import { SettingsState, startUpdate, updateErrors, updateField } from './Settings.slice';
 import { ContainerPage } from '../../ContainerPage/ContainerPage';
@@ -69,8 +69,9 @@ function onUpdateSettings(user: UserSettings) {
 
     result.match({
       err: (e) => store.dispatch(updateErrors(e)),
-      ok: (user) => {
-        store.dispatch(loadUser(user));
+      // ok: (user) => {
+      ok: () => {
+        // store.dispatch(loadUser(user));
         location.hash = '/';
       },
     });
@@ -80,6 +81,6 @@ function onUpdateSettings(user: UserSettings) {
 function _logout() {
   delete axios.defaults.headers.Authorization;
   localStorage.removeItem('token');
-  store.dispatch(logout());
+  // store.dispatch(logout());
   location.hash = '/';
 }
